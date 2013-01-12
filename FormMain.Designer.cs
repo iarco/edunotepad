@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.menuMain = new System.Windows.Forms.MenuStrip();
 			this.menuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuFileNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,15 +57,15 @@
 			this.menuEditSelectAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuEditDateTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.форматToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.переносПоСловамToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuFormatWordWrap = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuFormatFont = new System.Windows.Forms.ToolStripMenuItem();
-			this.видToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.строкаСостоянияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuView = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuViewStatusBar = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuHelpHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuHelpSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.statusMain = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabelLeft = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabelRight = new System.Windows.Forms.ToolStripStatusLabel();
 			this.textMain = new System.Windows.Forms.TextBox();
@@ -74,8 +75,9 @@
 			this.dialogPrint = new System.Windows.Forms.PrintDialog();
 			this.printDocument = new System.Drawing.Printing.PrintDocument();
 			this.dialogFont = new System.Windows.Forms.FontDialog();
+			this.timerPosition = new System.Windows.Forms.Timer(this.components);
 			this.menuMain.SuspendLayout();
-			this.statusStrip1.SuspendLayout();
+			this.statusMain.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuMain
@@ -84,7 +86,7 @@
             this.menuFile,
             this.menuEdit,
             this.форматToolStripMenuItem,
-            this.видToolStripMenuItem,
+            this.menuView,
             this.menuHelp});
 			this.menuMain.Location = new System.Drawing.Point(0, 0);
 			this.menuMain.Name = "menuMain";
@@ -192,6 +194,7 @@
 			this.menuEdit.Name = "menuEdit";
 			this.menuEdit.Size = new System.Drawing.Size(59, 20);
 			this.menuEdit.Text = "Правка";
+			this.menuEdit.DropDownClosed += new System.EventHandler(this.menuEdit_DropDownClosed);
 			this.menuEdit.DropDownOpening += new System.EventHandler(this.menuEdit_DropDownOpening);
 			// 
 			// menuEditUndo
@@ -234,7 +237,6 @@
 			// menuEditDelete
 			// 
 			this.menuEditDelete.Name = "menuEditDelete";
-			this.menuEditDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
 			this.menuEditDelete.Size = new System.Drawing.Size(190, 22);
 			this.menuEditDelete.Text = "Удалить";
 			this.menuEditDelete.Click += new System.EventHandler(this.menuEditDelete_Click);
@@ -305,17 +307,18 @@
 			// форматToolStripMenuItem
 			// 
 			this.форматToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.переносПоСловамToolStripMenuItem,
+            this.menuFormatWordWrap,
             this.menuFormatFont});
 			this.форматToolStripMenuItem.Name = "форматToolStripMenuItem";
 			this.форматToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
 			this.форматToolStripMenuItem.Text = "Формат";
 			// 
-			// переносПоСловамToolStripMenuItem
+			// menuFormatWordWrap
 			// 
-			this.переносПоСловамToolStripMenuItem.Name = "переносПоСловамToolStripMenuItem";
-			this.переносПоСловамToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-			this.переносПоСловамToolStripMenuItem.Text = "Перенос по словам";
+			this.menuFormatWordWrap.Name = "menuFormatWordWrap";
+			this.menuFormatWordWrap.Size = new System.Drawing.Size(183, 22);
+			this.menuFormatWordWrap.Text = "Перенос по словам";
+			this.menuFormatWordWrap.Click += new System.EventHandler(this.menuFormatWordWrap_Click);
 			// 
 			// menuFormatFont
 			// 
@@ -324,19 +327,21 @@
 			this.menuFormatFont.Text = "Шрифт...";
 			this.menuFormatFont.Click += new System.EventHandler(this.menuFormatFont_Click);
 			// 
-			// видToolStripMenuItem
+			// menuView
 			// 
-			this.видToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.строкаСостоянияToolStripMenuItem});
-			this.видToolStripMenuItem.Name = "видToolStripMenuItem";
-			this.видToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-			this.видToolStripMenuItem.Text = "Вид";
+			this.menuView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuViewStatusBar});
+			this.menuView.Name = "menuView";
+			this.menuView.Size = new System.Drawing.Size(39, 20);
+			this.menuView.Text = "Вид";
+			this.menuView.DropDownOpening += new System.EventHandler(this.menuView_DropDownOpening);
 			// 
-			// строкаСостоянияToolStripMenuItem
+			// menuViewStatusBar
 			// 
-			this.строкаСостоянияToolStripMenuItem.Name = "строкаСостоянияToolStripMenuItem";
-			this.строкаСостоянияToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-			this.строкаСостоянияToolStripMenuItem.Text = "Строка состояния";
+			this.menuViewStatusBar.Name = "menuViewStatusBar";
+			this.menuViewStatusBar.Size = new System.Drawing.Size(173, 22);
+			this.menuViewStatusBar.Text = "Строка состояния";
+			this.menuViewStatusBar.Click += new System.EventHandler(this.menuViewStatusBar_Click);
 			// 
 			// menuHelp
 			// 
@@ -360,25 +365,25 @@
 			// menuHelpSeparator1
 			// 
 			this.menuHelpSeparator1.Name = "menuHelpSeparator1";
-			this.menuHelpSeparator1.Size = new System.Drawing.Size(185, 6);
+			this.menuHelpSeparator1.Size = new System.Drawing.Size(178, 6);
 			// 
 			// menuHelpAbout
 			// 
 			this.menuHelpAbout.Name = "menuHelpAbout";
-			this.menuHelpAbout.Size = new System.Drawing.Size(188, 22);
+			this.menuHelpAbout.Size = new System.Drawing.Size(181, 22);
 			this.menuHelpAbout.Text = "О программе";
 			this.menuHelpAbout.Click += new System.EventHandler(this.menuHelpAbout_Click);
 			// 
-			// statusStrip1
+			// statusMain
 			// 
-			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.statusMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelLeft,
             this.toolStripStatusLabelRight});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 239);
-			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(412, 22);
-			this.statusStrip1.TabIndex = 1;
-			this.statusStrip1.Text = "statusMain";
+			this.statusMain.Location = new System.Drawing.Point(0, 239);
+			this.statusMain.Name = "statusMain";
+			this.statusMain.Size = new System.Drawing.Size(412, 22);
+			this.statusMain.TabIndex = 1;
+			this.statusMain.Text = "statusMain";
 			// 
 			// toolStripStatusLabelLeft
 			// 
@@ -389,6 +394,7 @@
 			// toolStripStatusLabelRight
 			// 
 			this.toolStripStatusLabelRight.AutoSize = false;
+			this.toolStripStatusLabelRight.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
 			this.toolStripStatusLabelRight.Name = "toolStripStatusLabelRight";
 			this.toolStripStatusLabelRight.Size = new System.Drawing.Size(50, 17);
 			// 
@@ -396,6 +402,7 @@
 			// 
 			this.textMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.textMain.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.textMain.HideSelection = false;
 			this.textMain.Location = new System.Drawing.Point(0, 24);
 			this.textMain.Multiline = true;
 			this.textMain.Name = "textMain";
@@ -425,6 +432,10 @@
 			// 
 			this.dialogFont.Color = System.Drawing.SystemColors.ControlText;
 			// 
+			// timerPosition
+			// 
+			this.timerPosition.Tick += new System.EventHandler(this.timerPosition_Tick);
+			// 
 			// FormMain
 			// 
 			this.AllowDrop = true;
@@ -432,7 +443,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(412, 261);
 			this.Controls.Add(this.textMain);
-			this.Controls.Add(this.statusStrip1);
+			this.Controls.Add(this.statusMain);
 			this.Controls.Add(this.menuMain);
 			this.MainMenuStrip = this.menuMain;
 			this.Name = "FormMain";
@@ -446,8 +457,8 @@
 			this.Resize += new System.EventHandler(this.FormMain_Resize);
 			this.menuMain.ResumeLayout(false);
 			this.menuMain.PerformLayout();
-			this.statusStrip1.ResumeLayout(false);
-			this.statusStrip1.PerformLayout();
+			this.statusMain.ResumeLayout(false);
+			this.statusMain.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -483,24 +494,25 @@
 		private System.Windows.Forms.ToolStripMenuItem menuEditSelectAll;
 		private System.Windows.Forms.ToolStripMenuItem menuEditDateTime;
 		private System.Windows.Forms.ToolStripMenuItem форматToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem переносПоСловамToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem menuFormatWordWrap;
 		private System.Windows.Forms.ToolStripMenuItem menuFormatFont;
-		private System.Windows.Forms.ToolStripMenuItem видToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem строкаСостоянияToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem menuView;
+		private System.Windows.Forms.ToolStripMenuItem menuViewStatusBar;
 		private System.Windows.Forms.ToolStripMenuItem menuHelp;
 		private System.Windows.Forms.ToolStripMenuItem menuHelpHelp;
 		private System.Windows.Forms.ToolStripSeparator menuHelpSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem menuHelpAbout;
-		private System.Windows.Forms.StatusStrip statusStrip1;
+		private System.Windows.Forms.StatusStrip statusMain;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelLeft;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelRight;
-		private System.Windows.Forms.TextBox textMain;
 		private System.Windows.Forms.OpenFileDialog dialogOpen;
 		private System.Windows.Forms.SaveFileDialog dialogSave;
 		private System.Windows.Forms.PageSetupDialog dialogPageSetup;
 		private System.Windows.Forms.PrintDialog dialogPrint;
 		private System.Drawing.Printing.PrintDocument printDocument;
 		private System.Windows.Forms.FontDialog dialogFont;
+		private System.Windows.Forms.Timer timerPosition;
+		public System.Windows.Forms.TextBox textMain;
 	}
 }
 

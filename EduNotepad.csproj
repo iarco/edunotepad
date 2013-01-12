@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -58,11 +59,29 @@
     <Compile Include="FormEncoding.Designer.cs">
       <DependentUpon>FormEncoding.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormFind.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormFind.Designer.cs">
+      <DependentUpon>FormFind.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormGoTo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormGoTo.Designer.cs">
+      <DependentUpon>FormGoTo.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormReplace.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReplace.Designer.cs">
+      <DependentUpon>FormReplace.cs</DependentUpon>
     </Compile>
     <Compile Include="Globals.cs" />
     <Compile Include="Program.cs" />
@@ -74,8 +93,17 @@
     <EmbeddedResource Include="FormEncoding.resx">
       <DependentUpon>FormEncoding.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormFind.resx">
+      <DependentUpon>FormFind.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormGoTo.resx">
+      <DependentUpon>FormGoTo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormReplace.resx">
+      <DependentUpon>FormReplace.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

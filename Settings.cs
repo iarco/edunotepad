@@ -23,6 +23,10 @@ namespace EduNotepad
 
 		// Размер окна: умолчания
 		// Высчитываются автоматически из размера экрана
+
+		// Размер окна: минимум
+		private const int DEFAULT_WIDTH_MINIMUM = 400;
+		private const int DEFAULT_HEIGHT_MINIMUM = 300;
 		#endregion
 
 		// Положение окна
@@ -32,6 +36,10 @@ namespace EduNotepad
 		// Положение окна: умолчания
 		private const int DEFAULT_X = 42;
 		private const int DEFAULT_Y = 42;
+
+		// Положение окна: минимум
+		private const int DEFAULT_VISIBLE_X = 100;
+		private const int DEFAULT_VISIBLE_Y = 100;
 
 		// Шрифт
 		private const string REGISTRY_FONT = "Font";
@@ -84,7 +92,7 @@ namespace EduNotepad
 
 			try
 			{
-				returnValue = keyCurrentUser.OpenSubKey(SETTINGS_SUBKEY, true);
+				returnValue = keyCurrentUser.CreateSubKey(SETTINGS_SUBKEY);
 			}
 			catch (Exception e)
 			{
@@ -92,137 +100,7 @@ namespace EduNotepad
 				returnValue = null;
 			}
 
-			if (returnValue == null)
-			{
- 				// Ключ с настройками не открылся, создаем его
-
-				try
-				{
-					returnValue = keyCurrentUser.CreateSubKey(SETTINGS_SUBKEY);
-				}
-				catch (Exception e)
-				{
-					Debug.Print(e.Message);
-					returnValue = null;
-				}
-				
-			}
-
 			return returnValue;
-		}
-
-		private static int ReadValueInt(string name, out bool success)
-		{
-			int returnValue = 0;
-			success = false;
-
-			RegistryKey rk = CreateOrOpenSettingsSubKey();
-
-			if (rk == null)
-			{
-				// Ключ не открылся, чтение невозможно
-
-				success = false;
-				returnValue = 0;
-			}
-			else
-			{
- 				// Ключ открылся
-
-				if (rk.GetValueNames().Contains(name, StringComparer.OrdinalIgnoreCase))
-				{
-					if (rk.GetValueKind(name) == RegistryValueKind.DWord)
-					{
-						try
-						{
-							returnValue = (int)rk.GetValue(name);
-							success = true;
-						}
-						catch (Exception e)
-						{
-							Debug.Print(e.Message);
-
-							returnValue = 0;
-							success = false;
-						}
-					}
-				}
-			}
-
-			return returnValue;
-		}
-
-		private static string ReadValueString(string name, out bool success)
-		{
-			string returnValue = string.Empty;
-			success = false;
-
-			RegistryKey rk = CreateOrOpenSettingsSubKey();
-
-			if (rk == null)
-			{
-				// Ключ не открылся, чтение невозможно
-
-				success = false;
-				returnValue = string.Empty;
-			}
-			else
-			{
-				// Ключ открылся
-
-				if (rk.GetValueNames().Contains(name, StringComparer.OrdinalIgnoreCase))
-				{
-					if (rk.GetValueKind(name) == RegistryValueKind.String)
-					{
-						try
-						{
-							returnValue = (string)rk.GetValue(name);
-							success = true;
-						}
-						catch (Exception e)
-						{
-							Debug.Print(e.Message);
-
-							returnValue = string.Empty;
-							success = false;
-						}
-					}
-				}
-			}
-
-			return returnValue;
-		}
-
-		private static void WriteValueInt(string name, int value)
-		{
-			RegistryKey rk = CreateOrOpenSettingsSubKey();
-
-			if (rk != null)
-			{
- 				// Ключ открылся, можем попробовать записать значение
-
-				try
-				{
-					rk.SetValue(name, (object)value, RegistryValueKind.DWord);
-				}
-				catch (Exception e) { Debug.Print(e.Message); }
-			}
-		}
-
-		private static void WriteValueString(string name, string value)
-		{
-			RegistryKey rk = CreateOrOpenSettingsSubKey();
-
-			if (rk != null)
-			{
-				// Ключ открылся, можем попробовать записать значение
-
-				try
-				{
-					rk.SetValue(name, (object)value, RegistryValueKind.String);
-				}
-				catch (Exception e) { Debug.Print(e.Message); }
-			}
 		}
 
 		private static T ReadValue<T>(string valueName, out bool success)
@@ -276,6 +154,44 @@ namespace EduNotepad
 			return (T)(object)returnValue;
 		}
 
+		private static void WriteValue(string valueName, object value)
+		{
+			RegistryValueKind rvk = RegistryValueKind.Unknown;
+
+			if (value is Int32 || value is Boolean)
+			{
+				rvk = RegistryValueKind.DWord;
+			}
+			else if (value is String)
+			{
+				rvk = RegistryValueKind.String;
+			}
+
+			if (rvk != RegistryValueKind.Unknown)
+			{
+				// Нам передали известное нам значение, мы знаем, как его обработать
+				RegistryKey keyEdu = CreateOrOpenSettingsSubKey();
+
+				if (keyEdu != null)
+				{
+ 					// Ключ реестра корректно открылся
+					try
+					{
+						keyEdu.SetValue(valueName, value, rvk);
+					}
+					catch (Exception e) { Debug.WriteLine(e.Message); }
+				}
+			}
+		}
+
+		public static Size MinimumWindowSize
+		{
+			get
+			{
+				return new Size(DEFAULT_WIDTH_MINIMUM, DEFAULT_HEIGHT_MINIMUM);
+			}
+		}
+
 		public static Size WindowSize
 		{
 			get
@@ -286,19 +202,23 @@ namespace EduNotepad
 
 				Size returnValue = new Size(0, 0);
 
-				returnValue.Width = ReadValueInt(REGISTRY_WIDTH, out success);
+				returnValue.Width = ReadValue<int>(REGISTRY_WIDTH, out success);
 				returnValue.Width = success ? returnValue.Width : (int)(Screen.PrimaryScreen.Bounds.Width * widthRatio);
+				returnValue.Width = returnValue.Width < Screen.PrimaryScreen.WorkingArea.Width ? returnValue.Width : Screen.PrimaryScreen.WorkingArea.Width;
+				returnValue.Width = returnValue.Width > DEFAULT_WIDTH_MINIMUM ? returnValue.Width : DEFAULT_WIDTH_MINIMUM;
 
-				int tempHeight = ReadValueInt(REGISTRY_HEIGHT, out success);
+				int tempHeight = ReadValue<int>(REGISTRY_HEIGHT, out success);
 				returnValue.Height = success ? tempHeight : (int)(Screen.PrimaryScreen.Bounds.Height * heightRatio);
+				returnValue.Height = returnValue.Height < Screen.PrimaryScreen.WorkingArea.Height ? returnValue.Height : Screen.PrimaryScreen.WorkingArea.Height;
+				returnValue.Height = returnValue.Height > DEFAULT_HEIGHT_MINIMUM ? returnValue.Height : DEFAULT_HEIGHT_MINIMUM;
 
 				return returnValue;
 			}
 			
 			set
 			{
-				WriteValueInt(REGISTRY_WIDTH, value.Width);
-				WriteValueInt(REGISTRY_HEIGHT, value.Height);
+				WriteValue(REGISTRY_WIDTH, value.Width);
+				WriteValue(REGISTRY_HEIGHT, value.Height);
 			}
 		}
 
@@ -308,20 +228,24 @@ namespace EduNotepad
 			{
 				Point returnValue = new Point(0, 0);
 				bool success;
+				int maximumX = Screen.PrimaryScreen.WorkingArea.Width - DEFAULT_VISIBLE_X;
+				int maximumY = Screen.PrimaryScreen.WorkingArea.Height - DEFAULT_VISIBLE_Y;
 
-				returnValue.X = ReadValueInt(REGISTRY_X, out success);
+				returnValue.X = ReadValue<int>(REGISTRY_X, out success);
 				returnValue.X = success ? returnValue.X : DEFAULT_X;
+				returnValue.X = returnValue.X < maximumX ? returnValue.X : maximumX;
 
-				returnValue.Y = ReadValueInt(REGISTRY_Y, out success);
+				returnValue.Y = ReadValue<int>(REGISTRY_Y, out success);
 				returnValue.Y = success ? returnValue.Y : DEFAULT_Y;
+				returnValue.Y = returnValue.Y < maximumY ? returnValue.Y : maximumY;
 
 				return returnValue;
 			}
 
 			set
 			{
-				WriteValueInt(REGISTRY_X, value.X);
-				WriteValueInt(REGISTRY_Y, value.Y);
+				WriteValue(REGISTRY_X, value.X);
+				WriteValue(REGISTRY_Y, value.Y);
 			}
 		}
 
@@ -333,7 +257,7 @@ namespace EduNotepad
 
 				Font returnValue = null;
 
-				string stringFont = ReadValueString(REGISTRY_FONT, out success);
+				string stringFont = ReadValue<string>(REGISTRY_FONT, out success);
 				stringFont = success ? stringFont : DEFAULT_FONT;
 				returnValue = (Font)(new FontConverter()).ConvertFromString(stringFont);
 
@@ -342,7 +266,35 @@ namespace EduNotepad
 
 			set
 			{
-				WriteValueString(REGISTRY_FONT, (new FontConverter()).ConvertToString(value));
+				WriteValue(REGISTRY_FONT, (new FontConverter()).ConvertToString(value));
+			}
+		}
+
+		public static bool WordWrap
+		{
+			get
+			{
+				bool success;
+				return ReadValue<bool>(REGISTRY_WRAP, out success);
+			}
+
+			set
+			{
+				WriteValue(REGISTRY_WRAP, value);
+			}
+		}
+
+		public static bool StatusBar
+		{
+			get
+			{
+				bool success;
+				return ReadValue<bool>(REGISTRY_STATUSBAR, out success);
+			}
+
+			set
+			{
+				WriteValue(REGISTRY_STATUSBAR, value);
 			}
 		}
 
@@ -357,16 +309,16 @@ namespace EduNotepad
 				if (_pageSettings == null) _pageSettings = new PageSettings();
 
 				// Читаем наши значения из реестра
-				_pageSettings.Margins.Left = ReadValueInt(REGISTRY_MARGIN_LEFT, out success);
+				_pageSettings.Margins.Left = ReadValue<int>(REGISTRY_MARGIN_LEFT, out success);
 				_pageSettings.Margins.Left = success ? _pageSettings.Margins.Left : DEFAULT_MARGIN_LEFT;
 
-				_pageSettings.Margins.Right = ReadValueInt(REGISTRY_MARGIN_RIGHT, out success);
+				_pageSettings.Margins.Right = ReadValue<int>(REGISTRY_MARGIN_RIGHT, out success);
 				_pageSettings.Margins.Right = success ? _pageSettings.Margins.Right : DEFAULT_MARGIN_RIGHT;
 
-				_pageSettings.Margins.Top = ReadValueInt(REGISTRY_MARGIN_TOP, out success);
+				_pageSettings.Margins.Top = ReadValue<int>(REGISTRY_MARGIN_TOP, out success);
 				_pageSettings.Margins.Top = success ? _pageSettings.Margins.Top : DEFAULT_MARGIN_TOP;
 
-				_pageSettings.Margins.Bottom = ReadValueInt(REGISTRY_MARGIN_BOTTOM, out success);
+				_pageSettings.Margins.Bottom = ReadValue<int>(REGISTRY_MARGIN_BOTTOM, out success);
 				_pageSettings.Margins.Bottom = success ? _pageSettings.Margins.Bottom : DEFAULT_MARGIN_BOTTOM;
 
 				return _pageSettings;
@@ -377,10 +329,10 @@ namespace EduNotepad
 				_pageSettings = value;
 
 				// Сохраняем значения отступов
-				WriteValueInt(REGISTRY_MARGIN_LEFT, value.Margins.Left);
-				WriteValueInt(REGISTRY_MARGIN_RIGHT, value.Margins.Right);
-				WriteValueInt(REGISTRY_MARGIN_TOP, value.Margins.Top);
-				WriteValueInt(REGISTRY_MARGIN_BOTTOM, value.Margins.Bottom);
+				WriteValue(REGISTRY_MARGIN_LEFT, value.Margins.Left);
+				WriteValue(REGISTRY_MARGIN_RIGHT, value.Margins.Right);
+				WriteValue(REGISTRY_MARGIN_TOP, value.Margins.Top);
+				WriteValue(REGISTRY_MARGIN_BOTTOM, value.Margins.Bottom);
 			}
 		}
 	}
