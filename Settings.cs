@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -31,19 +33,96 @@ namespace EduNotepad
 		private const int DEFAULT_X = 42;
 		private const int DEFAULT_Y = 42;
 
+		private static RegistryKey CreateOrOpenSettingsSubKey()
+		{
+			RegistryKey returnValue = null;
+
+			RegistryKey keyCurrentUser = Registry.CurrentUser;
+
+			try
+			{
+				returnValue = keyCurrentUser.OpenSubKey(SETTINGS_SUBKEY, true);
+			}
+			catch (Exception e)
+			{
+				Debug.Print(e.Message);
+				returnValue = null;
+			}
+
+			if (returnValue == null)
+			{
+ 				// Ключ с настройками не открылся, создаем его
+
+				try
+				{
+					returnValue = keyCurrentUser.CreateSubKey(SETTINGS_SUBKEY);
+				}
+				catch (Exception e)
+				{
+					Debug.Print(e.Message);
+					returnValue = null;
+				}
+				
+			}
+
+			return returnValue;
+		}
 
 		private static int ReadValueInt(string name, out bool success)
 		{
-			// TODO: ReadValueInt
-
-			// HACK: Это надо переписать!
+			int returnValue = 0;
 			success = false;
-			return 0;
+
+			RegistryKey rk = CreateOrOpenSettingsSubKey();
+
+			if (rk == null)
+			{
+				// Ключ не открылся, чтение невозможно
+
+				success = false;
+				returnValue = 0;
+			}
+			else
+			{
+ 				// Ключ открылся
+
+				if (rk.GetValueNames().Contains(name, StringComparer.OrdinalIgnoreCase))
+				{
+					if (rk.GetValueKind(name) == RegistryValueKind.DWord)
+					{
+						try
+						{
+							returnValue = (int)rk.GetValue(name);
+							success = true;
+						}
+						catch (Exception e)
+						{
+							Debug.Print(e.Message);
+
+							returnValue = 0;
+							success = false;
+						}
+					}
+				}
+			}
+
+			return returnValue;
 		}
 
 		private static void WriteValueInt(string name, int value)
 		{
-			// TODO: WriteValueInt
+			RegistryKey rk = CreateOrOpenSettingsSubKey();
+
+			if (rk != null)
+			{
+ 				// Ключ открылся, можем попробовать записать значение
+
+				try
+				{
+					rk.SetValue(name, (object)value, RegistryValueKind.DWord);
+				}
+				catch (Exception e) { Debug.Print(e.Message); }
+			}
 		}
 
 		public static Size WindowSize
