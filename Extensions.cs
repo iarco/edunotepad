@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EduNotepad
@@ -31,6 +30,16 @@ namespace EduNotepad
 			}
 
 			returnValue = sb.ToString();
+
+			return returnValue;
+		}
+
+		public static string ToShortDateAndTimeString(this DateTime date)
+		{
+			// Возвращаем дату и время в одинаковом формате для .LOG и для меню Правка
+			string returnValue = string.Empty;
+
+			returnValue = string.Format("{0} {1}", date.ToShortTimeString(), date.ToShortDateString());
 
 			return returnValue;
 		}

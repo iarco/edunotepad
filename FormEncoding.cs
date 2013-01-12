@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EduNotepad
@@ -35,6 +34,7 @@ namespace EduNotepad
 							comboEncoding.SelectedIndex = 1;
 							break;
 						}
+					case "unicodeFFFE":
 					case "utf-16BE":
 						{
 							comboEncoding.SelectedIndex = 2;

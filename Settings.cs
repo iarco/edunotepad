@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EduNotepad
@@ -39,6 +38,18 @@ namespace EduNotepad
 
 		// Шрифт: умолчания
 		private const string DEFAULT_FONT = "Lucida Console; 9,75pt";
+
+		// Перенос по словам
+		private const string REGISTRY_WRAP = "Wrap";
+
+		// Перенос по словам: умолчания
+		// Функция для чтения вернет false, если нет ключа в реестре
+
+		// Строка состояния
+		private const string REGISTRY_STATUSBAR = "StatusBar";
+
+		// Строка состояния: умолчания
+		// Функция для чтения вернет false, если нет ключа в реестре
 
 		// Отступ слева
 		private const string REGISTRY_MARGIN_LEFT = "MarginLeft";
@@ -212,6 +223,57 @@ namespace EduNotepad
 				}
 				catch (Exception e) { Debug.Print(e.Message); }
 			}
+		}
+
+		private static T ReadValue<T>(string valueName, out bool success)
+		{
+			success = false;
+
+			object returnValue = null;
+			RegistryValueKind rvk = RegistryValueKind.Unknown;
+
+			if (typeof(T) == typeof(string))
+			{
+ 				// Пользователь хочет прочитать настройку типа string
+				returnValue = string.Empty;
+				rvk = RegistryValueKind.String;
+			}
+			else if (typeof(T) == typeof(int))
+			{
+ 				// Пользователь хочет прочитать настройку типа int
+				returnValue = 0;
+				rvk = RegistryValueKind.DWord;
+			}
+			else if (typeof(T) == typeof(bool))
+			{
+ 				// Пользователь хочет прочитать настройку типа bool
+				returnValue = false;
+				rvk = RegistryValueKind.DWord;
+			}
+
+			RegistryKey keyEdu = Settings.CreateOrOpenSettingsSubKey();
+
+			try
+			{
+				if (keyEdu != null
+					&& keyEdu.GetValueNames().Contains(valueName, StringComparer.OrdinalIgnoreCase)
+					&& keyEdu.GetValueKind(valueName) == rvk)
+				{
+					returnValue = keyEdu.GetValue(valueName);
+					success = true;
+				}
+			}
+			catch (Exception e)
+			{
+				Debug.Print(e.Message);
+			}
+
+			if (typeof(T) == typeof(bool))
+			{
+				returnValue = returnValue.ToString() == "1" ? (object)true : (object)false;
+			}
+
+			return (T)(object)returnValue;
 		}
 
 		public static Size WindowSize

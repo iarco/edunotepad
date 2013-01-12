@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EduNotepad
@@ -30,7 +29,7 @@ namespace EduNotepad
 					argsList.RemoveAt(0);
 				}
 
-				string fileName = string.Join(" ", argsList);
+				string fileName = string.Join(" ", argsList.ToArray());
 				
 				// TODO: Вызвать код для попытки угадывания кодировки файла
 				if (File.Exists(fileName)) formMain.PerformFileOpen(fileName, Encoding.Default);

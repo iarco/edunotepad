@@ -1,14 +1,15 @@
-﻿using Microsoft.Win32;
+﻿using HelpPane;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EduNotepad
@@ -63,8 +64,6 @@ namespace EduNotepad
 
 			// Выставляем шрифт
 			textMain.Font = Settings.TextBoxFont;
-
-			// TODO: Иногда пропадает курсор
 
 			// Обновляем заголовок окна
 			this.Text = CreateWindowCaption();
@@ -138,11 +137,12 @@ namespace EduNotepad
 
 				returnValue.fileName = dialogOpen.FileName;
 
-				// TODO: Попытаться определить кодировку файла по первым 2 или 3 байтам
+				// Попытаться определить кодировку файла по первым 2 или 3 байтам
+				Encoding fileEncoding = CheckFileEncoding(returnValue.fileName);
 
 				// Спрашиваем кодировку
 				if (formEncoding == null) formEncoding = new FormEncoding();
-				returnValue.fileEncoding = formEncoding.SelectEncoding(null);
+				returnValue.fileEncoding = formEncoding.SelectEncoding(fileEncoding);
 			}
 
 			return returnValue;
@@ -172,7 +172,7 @@ namespace EduNotepad
 				if (textMain.Lines.Length > 0 && textMain.Lines[0].Length > 3 && textMain.Lines[0].Substring(0, 4) == ".LOG")
 				{
  					// Да, нужно вставить текущую дату и время
-					textMain.Text += string.Format("\r\n{0}\r\n", GetDateTime());
+					textMain.Text += string.Format("\r\n{0}\r\n", DateTime.Now.ToShortDateAndTimeString());
 
 					// Переходим в самый конец файла
 					textMain.SelectionStart = textMain.Text.Length;
@@ -183,17 +183,6 @@ namespace EduNotepad
 				string message = string.Format(Globals.Strings.MESSAGE_ERROR_FILE_OPEN, file, e.Message);
 				MessageBox.Show(message, Globals.Strings.APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-		}
-
-		private string GetDateTime()
-		{
- 			// Возвращаем дату и время в одинаковом формате для .LOG и для меню Правка
-			string returnValue = string.Empty;
-			
-			DateTime dtNow = DateTime.Now;
-			returnValue = string.Format("{0} {1}", dtNow.ToShortTimeString(), dtNow.ToShortDateString());
-			
-			return returnValue;
 		}
 
 		private string CreateWindowCaption()
@@ -561,20 +550,7 @@ namespace EduNotepad
 		{
 			// 15:59 04.01.2013
 
-			// TODO: Не работает Ctrl+Z
-
-			string dateTime = GetDateTime();
-
-			if (textMain.SelectionLength != 0)
-			{
-				textMain.SelectedText = dateTime;
-			}
-			else
-			{
-				int selectionIndex = textMain.SelectionStart;
-				textMain.Text = textMain.Text.Insert(selectionIndex, dateTime);
-				textMain.SelectionStart = selectionIndex + dateTime.Length;
-			}
+			textMain.Paste(DateTime.Now.ToShortDateAndTimeString());
 		}
 
 		private void menuEdit_DropDownOpening(object sender, EventArgs e)
@@ -636,8 +612,8 @@ namespace EduNotepad
 				return;
 			}
 			
-			// TODO: Это нехорошо, поскольку некоторые строчки могут не влезть!
-			if (printLines.Count == 0) printLines = new Queue<string>(textMain.Lines);
+			// Готовим объект со строками для распечатки
+			if (printLines.Count == 0) PreparePrintLines(e.Graphics, e.MarginBounds);
 
 			float yPos = 0F;
 			int count = 0;
@@ -659,6 +635,111 @@ namespace EduNotepad
 			e.HasMorePages = printLines.Count != 0;
 		}
 
+		private void PreparePrintLines(Graphics g, Rectangle marginBounds)
+		{
+			string[] lines = textMain.Lines;
+
+			foreach (string line in lines)
+			{
+				// Выполняем измерение строки
+				SizeF lineSize = g.MeasureString(line, Settings.TextBoxFont);
+
+				if ((int)Math.Ceiling(lineSize.Width) <= marginBounds.Width)
+				{
+					// Наша строчка влезает без изменений, ура!
+
+					// Добавляем ее в список
+					printLines.Enqueue(line);
+				}
+				else
+				{
+ 					// Строчка не влезла, придется ее резать
+
+					// TODO: Баг с пробелами на переносе текста
+
+					string[] splitLine = line.Split(new string[] { " " }, StringSplitOptions.None);
+					List<string> lineQueue = new List<string>(splitLine);
+					string buffer = string.Empty;
+
+					do
+					{
+						// Очищаем буфер от предыдущих результатов
+						buffer = string.Empty;
+
+						// Добавляем в буфер первое слово
+						buffer += lineQueue[0].Length == 0 ? " " : lineQueue[0];
+
+						// Проверяем, влезает ли первое слово из строки в ширину листа
+						if ((int)Math.Ceiling(g.MeasureString(buffer, Settings.TextBoxFont).Width) > marginBounds.Width)
+						{
+							// Слово не влезло
+							string veryLongWord = lineQueue[0];
+							string wordBuffer = string.Empty;
+
+							for (int i = 0; i < veryLongWord.Length; i++)
+							{
+								string newBuffer = wordBuffer + veryLongWord.Substring(i, 1);
+
+								if ((int)Math.Ceiling(g.MeasureString(newBuffer, Settings.TextBoxFont).Width) > marginBounds.Width)
+								{
+									// В newBuffer слишком длинная строка, надо вернуть wordBuffer и прекратить
+
+									// Кладем wordBuffer в наш объект
+									printLines.Enqueue(wordBuffer);
+
+									// И теперь обновляем первое слово в нашем массиве слов
+									lineQueue[0] = veryLongWord.Substring(i, veryLongWord.Length - i);
+
+									// Прерываем цикл
+									break;
+								}
+								else
+								{
+									// Продолжаем
+									wordBuffer = newBuffer;
+								}
+							}
+						}
+						else
+						{
+							// Слово влезло, можно продолжать
+
+							// Удаляем его из lineQueue
+							lineQueue.RemoveAt(0);
+
+							// Запускаем еще один цикл
+							while (lineQueue.Count != 0)
+							{
+								string newBuffer = buffer + " " + lineQueue[0];
+
+								if ((int)Math.Ceiling(g.MeasureString(newBuffer, Settings.TextBoxFont).Width) > marginBounds.Width)
+								{
+									// Мы прибавили одно слово, результат не влез
+
+									// Выходим из цикла
+									break;
+								}
+								else
+								{
+ 									// Мы прибавили одно слово, результат влез
+
+									// Удаляем слово из списка
+									lineQueue.RemoveAt(0);
+
+									// Изменяем буфер
+									buffer = newBuffer;
+								}
+							}
+
+							// Добавляем буфер в список печати
+							printLines.Enqueue(buffer);
+						}
+					}
+					while (lineQueue.Count != 0);
+				}
+			}
+		}
+
 		private void menuFormatFont_Click(object sender, EventArgs e)
 		{
 			// Указываем уже выбранный шрифт
@@ -672,6 +753,101 @@ namespace EduNotepad
 				// Сохраняем его в настройках
 				Settings.TextBoxFont = textMain.Font;
 			}
+		}
+
+		private void FormMain_DragEnter(object sender, DragEventArgs e)
+		{
+			e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+		}
+
+		private void FormMain_DragDrop(object sender, DragEventArgs e)
+		{
+			object dropData = e.Data.GetData(DataFormats.FileDrop);
+			string[] files = (string[])dropData;
+			string file = files[0];
+
+			if (DealWithChanges())
+			{
+				if (File.Exists(file))
+				{
+					// Попытаться определить кодировку файла по первым 2 или 3 байтам
+					Encoding fileEncoding = CheckFileEncoding(file);
+
+					// Спрашиваем кодировку
+					if (formEncoding == null) formEncoding = new FormEncoding();
+					fileEncoding = formEncoding.SelectEncoding(fileEncoding);
+
+					PerformFileOpen(file, fileEncoding);
+				}
+			}
+		}
+
+		public Encoding CheckFileEncoding(string file)
+		{
+			Encoding returnValue = Encoding.Default;
+
+			// Unicode = FF FE
+			string bomUnicode = "FFFE";
+
+			// Unicode BE = FE FF
+			string bomUnicodeBE = "FEFF";
+
+			// UTF-8 = EF BB BF
+			string bomUtf8 = "EFBBBF";
+
+			// Создаем буфер для возврата
+			byte[] buffer = new byte[3];
+
+			// Создаем объект для файлового потока
+			FileStream fs = null;
+
+			// Флаг успешного чтения
+			bool success = false;
+
+			try
+			{
+				fs = new FileStream(file, FileMode.Open, FileAccess.Read);
+				fs.Read(buffer, 0, 3);
+
+				// Устанавливаю флаг успешного чтения
+				success = true;
+			}
+			catch (Exception e)
+			{
+				Debug.Print(e.Message);
+			}
+			finally
+			{
+				if (fs != null) fs.Close();
+			}
+
+			if (success)
+			{
+ 				// Начинаем разбираться, что же мы там прочитали
+				string bytes3 = buffer[0].ToString("X2") + buffer[1].ToString("X2") + buffer[2].ToString("X2");
+				string bytes2 = buffer[0].ToString("X2") + buffer[1].ToString("X2");
+
+				if (bytes3 == bomUtf8)
+				{
+					returnValue = Encoding.UTF8;
+				}
+				else if (bytes2 == bomUnicode)
+				{
+					returnValue = Encoding.Unicode;
+				}
+				else if (bytes2 == bomUnicodeBE)
+				{
+					returnValue = Encoding.BigEndianUnicode;
+				}
+			}
+
+			return returnValue;
+		}
+
+		private void menuHelpHelp_Click(object sender, EventArgs e)
+		{
+			HxHelpPane pHelpPane = new HxHelpPane();
+			pHelpPane.DisplayTask("mshelp://windows/?id=5d18d5fb-e737-4a73-b6cc-dccc63720231");
 		}
 	}
 }

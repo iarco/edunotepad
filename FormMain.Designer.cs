@@ -351,8 +351,11 @@
 			// menuHelpHelp
 			// 
 			this.menuHelpHelp.Name = "menuHelpHelp";
-			this.menuHelpHelp.Size = new System.Drawing.Size(188, 22);
+			this.menuHelpHelp.ShortcutKeys = System.Windows.Forms.Keys.F1;
+			this.menuHelpHelp.ShowShortcutKeys = false;
+			this.menuHelpHelp.Size = new System.Drawing.Size(181, 22);
 			this.menuHelpHelp.Text = "Посмотреть справку";
+			this.menuHelpHelp.Click += new System.EventHandler(this.menuHelpHelp_Click);
 			// 
 			// menuHelpSeparator1
 			// 
@@ -424,6 +427,7 @@
 			// 
 			// FormMain
 			// 
+			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(412, 261);
@@ -436,6 +440,8 @@
 			this.Text = "Form1";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
 			this.Load += new System.EventHandler(this.FormMain_Load);
+			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.FormMain_DragDrop);
+			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.FormMain_DragEnter);
 			this.Move += new System.EventHandler(this.FormMain_Move);
 			this.Resize += new System.EventHandler(this.FormMain_Resize);
 			this.menuMain.ResumeLayout(false);
