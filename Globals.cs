@@ -10,17 +10,25 @@ namespace EduNotepad
 	{
 		public static class Strings
 		{
+			// Название приложения
 			public const string APP_NAME = "EduNotepad";
 
-			public const string ABOUT_CAPTION = "О {0}";
+			// Заголовки окон
+			private const string CAPTION_ABOUT = "О {0}";
 
-			public const string ENCODING_CAPTION = "Выберите кодировку";
+			public const string CAPTION_ENCODING = "Выберите кодировку";
+
+			// Прочие строки
+			public const string UNTITLED = "Безымянный";
+
+			// Сообщения
+			public const string MESSAGE_ERROR_FILE_OPEN = "Произошла ошибка чтения файла:\r\n\r\n{0}\r\n\r\nПодробнее:\r\n{1}";
 
 			public static string AboutCaption
 			{
 				get
 				{
-					return string.Format(Globals.Strings.ABOUT_CAPTION, Globals.Strings.APP_NAME);
+					return string.Format(Globals.Strings.CAPTION_ABOUT, Globals.Strings.APP_NAME);
 				}
 			}
 		}
