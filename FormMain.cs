@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -60,6 +61,9 @@ namespace EduNotepad
 			// Выставляем положение окна
 			this.Location = Settings.WindowLocation;
 
+			// Выставляем шрифт
+			textMain.Font = Settings.TextBoxFont;
+
 			// TODO: Иногда пропадает курсор
 
 			// Обновляем заголовок окна
@@ -73,35 +77,37 @@ namespace EduNotepad
 
 		private void menuFileNew_Click(object sender, EventArgs e)
 		{
-			// TODO: Разобраться с теми изменениями, что мог внести пользователь
+			if (DealWithChanges())
+			{
+				// Обнуляем имя файла
+				fileName = string.Empty;
 
-			// Обнуляем имя файла
-			fileName = string.Empty;
+				// Обнуляем кодировку
+				fileEncoding = null;
 
-			// Обнуляем кодировку
-			fileEncoding = null;
+				// Обнуляем хэш
+				saveMD5 = string.Empty;
 
-			// Обнуляем хэш
-			saveMD5 = string.Empty;
+				// Обнуляем текстовое поле
+				textMain.Text = string.Empty;
 
-			// Обнуляем текстовое поле
-			textMain.Text = string.Empty;
-
-			// Обновляем заголовок окна
-			this.Text = CreateWindowCaption();
+				// Обновляем заголовок окна
+				this.Text = CreateWindowCaption();
+			}
 		}
 
 		private void menuFileOpen_Click(object sender, EventArgs e)
 		{
-			// TODO: Разобраться с теми изменениями, что мог внести пользователь
-
-			// Спрашиваем у пользователя кодировку и имя файла
-			FileInformation fi = GetOpenFileNameAndEncoding();
-
-			if (!fi.Cancel)
+			if (DealWithChanges())
 			{
- 				// Выполняем чтение файла
-				PerformFileOpen(fi.fileName, fi.fileEncoding);
+				// Спрашиваем у пользователя кодировку и имя файла
+				FileInformation fi = GetOpenFileNameAndEncoding();
+
+				if (!fi.Cancel)
+				{
+					// Выполняем чтение файла
+					PerformFileOpen(fi.fileName, fi.fileEncoding);
+				}
 			}
 		}
 
@@ -226,7 +232,8 @@ namespace EduNotepad
 
 			if (fileName != string.Empty)
 			{
-				// TODO: У нас есть имя файла, выполняем запись
+				// Просто выполняем запись файла
+				PerformFileSave();
 			}
 			else
 			{
@@ -282,24 +289,220 @@ namespace EduNotepad
 			return returnValue;
 		}
 
+		private bool PerformFileSave()
+		{
+			bool returnValue = false;
+
+			try
+			{
+				// Выполняем запись
+				File.WriteAllText(fileName, textMain.Text, fileEncoding);
+
+				// Обновляем хэш
+				saveMD5 = textMain.MD5OfText();
+
+				// Строим заголовок окна
+				this.Text = CreateWindowCaption();
+
+				// Возвращаемое значение
+				returnValue = true;
+			}
+			catch (Exception e)
+			{
+				string message = string.Format(Globals.Strings.MESSAGE_ERROR_FILE_SAVE, fileName, e.Message);
+				MessageBox.Show(message, Globals.Strings.APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+
+			return returnValue;
+		}
+
 		private void menuFileSaveAs_Click(object sender, EventArgs e)
 		{
 			FileInformation fi = GetSaveFileNameAndEncoding();
+
+			if(!fi.Cancel)
+			{
+				// Сохраняем значения
+				fileName = fi.fileName;
+				fileEncoding = fi.fileEncoding;
+
+				// Выполняем запись
+				PerformFileSave();
+			}
+		}
+
+		private bool DealWithChanges()
+		{
+			bool returnValue = false;
+			bool haveChanges = false;
+
+			if (saveMD5 != string.Empty)
+			{
+				// Мы либо уже сохраняли файл, либо работаем с открытым файлом
+
+				// Если есть изменения, то saveMD5 != textMain.MD5OfText()
+				haveChanges = saveMD5 != textMain.MD5OfText();
+			}
+			else
+			{
+				// Файл не сохранялся, он новый
+
+				// Если есть изменения, то textMain.TextLength != 0
+				haveChanges = textMain.TextLength != 0;
+			}
+
+			if (!haveChanges)
+			{
+				// Изменений не было
+				returnValue = true;
+			}
+			else
+			{
+ 				// Были изменения, будем разбираться
+
+				// Строим имя файла для отображения
+				string fileNameToDisplay = fileName == string.Empty ? Globals.Strings.UNTITLED : fileName;
+
+				DialogResult saveResult = MessageBox.Show(
+					string.Format(Globals.Strings.MESSAGE_SAVE_OR_NOT, fileNameToDisplay),
+					Globals.Strings.APP_NAME,
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Exclamation);
+
+				switch (saveResult)
+				{
+					case DialogResult.Yes:
+						{
+ 							// Пользователь хочет сохранить изменения
+
+							if (fileName == string.Empty)
+							{
+ 								// У нас нет имени файла, надо его спросить
+
+								FileInformation fi = GetSaveFileNameAndEncoding();
+
+								if (!fi.Cancel)
+								{
+									fileName = fi.fileName;
+									fileEncoding = fi.fileEncoding;
+								}
+							}
+
+							if (fileName == string.Empty)
+							{
+								// Пользователь где-то нажал "Отмена"
+								// Вернем false
+
+								returnValue = false;
+							}
+							else
+							{
+								// Вернем результат в зависимости от успешности сохранения
+
+								returnValue = PerformFileSave();
+							}
+
+							break;
+						}
+
+					case DialogResult.No:
+						{
+							// Пользователь не хочет ничего сохранять
+							// Вернем true, изменения не нужны
+
+							returnValue = true;
+
+							break;
+						}
+
+					case DialogResult.Cancel:
+						{
+							// Пользователь вообще передумал
+							// Вернем false, чтобы ничего не произошло далее
+
+							returnValue = false;
+
+							break;
+						}
+						
+				}
+			}
+
+			return returnValue;
 		}
 
 		private void menuFilePageSetup_Click(object sender, EventArgs e)
 		{
+			// Создаем переменную и в нее кладем текущие настройки
+			PageSettings ps = Settings.PageSettings;
+			
+			// Передаем настройки диалоговому окну
+			dialogPageSetup.PageSettings = ps;
+			dialogPageSetup.EnableMetric = false;
 
+			if(dialogPageSetup.ShowDialog() == DialogResult.OK)
+			{
+				// Пользователь хочет сохранить настройки
+				dialogPageSetup.PageSettings.Margins.Left = (int)(Math.Round((double)ps.Margins.Left * 0.254D, 0) * 10D);
+				dialogPageSetup.PageSettings.Margins.Right = (int)(Math.Round((double)ps.Margins.Right * 0.254D, 0) * 10D);
+				dialogPageSetup.PageSettings.Margins.Top = (int)(Math.Round((double)ps.Margins.Top * 0.254D, 0) * 10D);
+				dialogPageSetup.PageSettings.Margins.Bottom = (int)(Math.Round((double)ps.Margins.Bottom * 0.254D, 0) * 10D);
+
+				// Записываем настройки
+				Settings.PageSettings = dialogPageSetup.PageSettings;
+			}
 		}
 
 		private void menuFilePrint_Click(object sender, EventArgs e)
 		{
+			if (textMain.TextLength != 0)
+			{
+				if (dialogPrint.ShowDialog() == DialogResult.OK)
+				{
+					// Выполняем распечатку
+					PerformPrint(dialogPrint.PrinterSettings, Settings.PageSettings);
 
+					// Сохраняем настройки для дальнейшей работы - чтобы они были в Параметрах страницы
+					Settings.PageSettings.PrinterSettings = dialogPrint.PrinterSettings;
+				}
+			}
+		}
+
+		public void PerformPrint(PrinterSettings printerSettings, PageSettings pageSettings)
+		{
+			try
+			{
+				// Выставляем настройки принтера
+				printDocument.PrinterSettings = printerSettings;
+
+				// Выставляем ориентацию страницы
+				printDocument.DefaultPageSettings.Landscape = pageSettings.Landscape;
+
+				// Выставляем название документа
+				printDocument.DocumentName = this.CreateWindowCaption();
+
+				// Выполняем пересчет из миллиметров в доли дюймов
+				printDocument.DefaultPageSettings.Margins.Left = (int)(Math.Round((double)pageSettings.Margins.Left / 2.54D, 0));
+				printDocument.DefaultPageSettings.Margins.Right = (int)(Math.Round((double)pageSettings.Margins.Right / 2.54D, 0));
+				printDocument.DefaultPageSettings.Margins.Top = (int)(Math.Round((double)pageSettings.Margins.Top / 2.54D, 0));
+				printDocument.DefaultPageSettings.Margins.Bottom = (int)(Math.Round((double)pageSettings.Margins.Bottom / 2.54D, 0));
+
+				// Отправляем на печать
+				printDocument.Print();
+			}
+			catch (Exception e)
+			{
+				string message = string.Format(Globals.Strings.MESSAGE_ERROR_PRINT, e.Message);
+				MessageBox.Show(message, Globals.Strings.APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 		}
 
 		private void menuFileExit_Click(object sender, EventArgs e)
 		{
-
+			if (DealWithChanges())
+			{
+				Application.Exit();
+			}
 		}
 
 		private void menuEditUndo_Click(object sender, EventArgs e)
@@ -398,6 +601,77 @@ namespace EduNotepad
 		private void menuHelpAbout_Click(object sender, EventArgs e)
 		{
 			(new FormAbout() { Text = Globals.Strings.AboutCaption }).ShowDialog();
+		}
+
+		private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			// Спрашиваем про имя файла для сохранения только тогда, когда нас закрывает пользователь
+
+			if (e.CloseReason == CloseReason.UserClosing)
+			{
+				if (!DealWithChanges()) e.Cancel = true;
+			}
+		}
+
+		Queue<string> printLines = new Queue<string>();
+
+		private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
+		{
+			// TODO: Нужно понять, нормальная ли площадь осталась для распечатки?
+			// Если места недостаточно, то отменяем печать и выходим
+
+			string testString = "ШШ";
+			SizeF lineSize = e.Graphics.MeasureString(testString, Settings.TextBoxFont);
+
+			if (lineSize.Width > e.MarginBounds.Width || lineSize.Height > e.MarginBounds.Height)
+			{
+				// TODO: Это можно отловить уровнем выше
+
+				// Страница слишком мала для распечатки, выводим сообщение и отменяем
+				string message = string.Format(Globals.Strings.MESSAGE_ERROR_PRINT, Globals.Strings.MESSAGE_ERROR_PRINT_MARGINS);
+				MessageBox.Show(message, Globals.Strings.APP_NAME, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+				// Отменяем печать
+				e.Cancel = true;
+				return;
+			}
+			
+			// TODO: Это нехорошо, поскольку некоторые строчки могут не влезть!
+			if (printLines.Count == 0) printLines = new Queue<string>(textMain.Lines);
+
+			float yPos = 0F;
+			int count = 0;
+			float lineHeight = Settings.TextBoxFont.GetHeight(e.Graphics);
+
+			// Высчитываем количество строк, которое поместится на страницу
+			float linesPerPage = e.MarginBounds.Height / lineHeight;
+
+			while (count < linesPerPage && printLines.Count != 0)
+			{
+				// Получаем строчку для вывода на лист
+				string line = printLines.Dequeue();
+
+				yPos = e.MarginBounds.Top + (count * lineHeight);
+				e.Graphics.DrawString(line, Settings.TextBoxFont, Brushes.Black, e.MarginBounds.Left, yPos);
+				count++;
+			}
+
+			e.HasMorePages = printLines.Count != 0;
+		}
+
+		private void menuFormatFont_Click(object sender, EventArgs e)
+		{
+			// Указываем уже выбранный шрифт
+			dialogFont.Font = textMain.Font;
+
+			if (dialogFont.ShowDialog() == DialogResult.OK)
+			{
+				// Выставляем шрифт
+				textMain.Font = dialogFont.Font;
+				
+				// Сохраняем его в настройках
+				Settings.TextBoxFont = textMain.Font;
+			}
 		}
 	}
 }

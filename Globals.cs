@@ -22,7 +22,11 @@ namespace EduNotepad
 			public const string UNTITLED = "Безымянный";
 
 			// Сообщения
+			public const string MESSAGE_SAVE_OR_NOT = "Вы хотите сохранить изменения в файле {0}?";
 			public const string MESSAGE_ERROR_FILE_OPEN = "Произошла ошибка чтения файла:\r\n\r\n{0}\r\n\r\nПодробнее:\r\n{1}";
+			public const string MESSAGE_ERROR_FILE_SAVE = "Произошла ошибка записи файла:\r\n\r\n{0}\r\n\r\nПодробнее:\r\n{1}";
+			public const string MESSAGE_ERROR_PRINT = "В процессе печати произошла следующая ошибка:\r\n\r\n{0}";
+			public const string MESSAGE_ERROR_PRINT_MARGINS = "Поля документа слишком велики для печати документа.";
 
 			public static string AboutCaption
 			{

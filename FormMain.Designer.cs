@@ -57,7 +57,7 @@
 			this.menuEditDateTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.форматToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.переносПоСловамToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.шрифтToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuFormatFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.видToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.строкаСостоянияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,6 +70,10 @@
 			this.textMain = new System.Windows.Forms.TextBox();
 			this.dialogOpen = new System.Windows.Forms.OpenFileDialog();
 			this.dialogSave = new System.Windows.Forms.SaveFileDialog();
+			this.dialogPageSetup = new System.Windows.Forms.PageSetupDialog();
+			this.dialogPrint = new System.Windows.Forms.PrintDialog();
+			this.printDocument = new System.Drawing.Printing.PrintDocument();
+			this.dialogFont = new System.Windows.Forms.FontDialog();
 			this.menuMain.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -302,7 +306,7 @@
 			// 
 			this.форматToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.переносПоСловамToolStripMenuItem,
-            this.шрифтToolStripMenuItem});
+            this.menuFormatFont});
 			this.форматToolStripMenuItem.Name = "форматToolStripMenuItem";
 			this.форматToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
 			this.форматToolStripMenuItem.Text = "Формат";
@@ -313,11 +317,12 @@
 			this.переносПоСловамToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
 			this.переносПоСловамToolStripMenuItem.Text = "Перенос по словам";
 			// 
-			// шрифтToolStripMenuItem
+			// menuFormatFont
 			// 
-			this.шрифтToolStripMenuItem.Name = "шрифтToolStripMenuItem";
-			this.шрифтToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-			this.шрифтToolStripMenuItem.Text = "Шрифт...";
+			this.menuFormatFont.Name = "menuFormatFont";
+			this.menuFormatFont.Size = new System.Drawing.Size(183, 22);
+			this.menuFormatFont.Text = "Шрифт...";
+			this.menuFormatFont.Click += new System.EventHandler(this.menuFormatFont_Click);
 			// 
 			// видToolStripMenuItem
 			// 
@@ -405,6 +410,18 @@
 			this.dialogSave.DefaultExt = "txt";
 			this.dialogSave.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы|*.*";
 			// 
+			// dialogPrint
+			// 
+			this.dialogPrint.UseEXDialog = true;
+			// 
+			// printDocument
+			// 
+			this.printDocument.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument_PrintPage);
+			// 
+			// dialogFont
+			// 
+			this.dialogFont.Color = System.Drawing.SystemColors.ControlText;
+			// 
 			// FormMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -417,6 +434,7 @@
 			this.Name = "FormMain";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Form1";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
 			this.Load += new System.EventHandler(this.FormMain_Load);
 			this.Move += new System.EventHandler(this.FormMain_Move);
 			this.Resize += new System.EventHandler(this.FormMain_Resize);
@@ -460,7 +478,7 @@
 		private System.Windows.Forms.ToolStripMenuItem menuEditDateTime;
 		private System.Windows.Forms.ToolStripMenuItem форматToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem переносПоСловамToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem шрифтToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem menuFormatFont;
 		private System.Windows.Forms.ToolStripMenuItem видToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem строкаСостоянияToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem menuHelp;
@@ -473,6 +491,10 @@
 		private System.Windows.Forms.TextBox textMain;
 		private System.Windows.Forms.OpenFileDialog dialogOpen;
 		private System.Windows.Forms.SaveFileDialog dialogSave;
+		private System.Windows.Forms.PageSetupDialog dialogPageSetup;
+		private System.Windows.Forms.PrintDialog dialogPrint;
+		private System.Drawing.Printing.PrintDocument printDocument;
+		private System.Windows.Forms.FontDialog dialogFont;
 	}
 }
 
