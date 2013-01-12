@@ -54,6 +54,13 @@ namespace EduNotepad
 		FormReplace formReplace = null;
 		FormGoTo formGoTo = null;
 
+		// TODO: В элементе управления TextBox есть баг:
+		// 1. Выключаем перенос по словам, чтобы показался нижний горизонтальный ScrollBar
+		// 2. Набираем длинную строку текста с пробелами, чтобы она была очень длинной и чтобы ScrollBar включился
+		// 3. Вручную расставляем переносы текста в нашей длинной строке так, чтобы она осталась на экране
+		// 4. Обращаем внимание на ScrollBar - он не выключится
+		// Спасибо Косте Колганову за нахождение этого бага - в обычном Блокноте он тоже есть :)
+
 		public FormMain()
 		{
 			InitializeComponent();
@@ -82,6 +89,9 @@ namespace EduNotepad
 			// Выставляем шрифт
 			textMain.Font = Settings.TextBoxFont;
 
+			// TODO: Вызов textMain.WordWrap = false приводит к тому, что текстовое поле теряет фокус (т.е. курсор)
+			// Возможно, это какой-то баг, пока непонятно
+
 			// Выставляем перенос по словам
 			textMain.WordWrap = Settings.WordWrap;
 			menuFormatWordWrap.Checked = Settings.WordWrap;
@@ -100,7 +110,12 @@ namespace EduNotepad
 
 		private void FormMain_Move(object sender, EventArgs e)
 		{
-			Settings.WindowLocation = this.Location;
+			// Координаты надо записывать только тогда, когда окно не свернуто или не развернуто (спасибо Диме Крохину)
+
+			if (this.WindowState == FormWindowState.Normal)
+			{
+				Settings.WindowLocation = this.Location;
+			}
 		}
 
 		private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -131,10 +146,7 @@ namespace EduNotepad
 					// Попытаться определить кодировку файла по первым 2 или 3 байтам
 					Encoding fileEncoding = CheckFileEncoding(file);
 
-					// Спрашиваем кодировку
-					if (formEncoding == null) formEncoding = new FormEncoding();
-					fileEncoding = formEncoding.SelectEncoding(fileEncoding);
-
+					// Выполняем открытие файла
 					PerformFileOpen(file, fileEncoding);
 				}
 			}

@@ -46,7 +46,7 @@
 			this.labelFind.Name = "labelFind";
 			this.labelFind.Size = new System.Drawing.Size(29, 13);
 			this.labelFind.TabIndex = 0;
-			this.labelFind.Text = "Что:";
+			this.labelFind.Text = "Чт&о:";
 			// 
 			// textFind
 			// 
@@ -63,7 +63,7 @@
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(32, 13);
 			this.label2.TabIndex = 2;
-			this.label2.Text = "Чем:";
+			this.label2.Text = "Ч&ем:";
 			// 
 			// textReplace
 			// 
@@ -79,7 +79,7 @@
 			this.checkCase.Name = "checkCase";
 			this.checkCase.Size = new System.Drawing.Size(120, 17);
 			this.checkCase.TabIndex = 4;
-			this.checkCase.Text = "С учетом регистра";
+			this.checkCase.Text = "С учетом ре&гистра";
 			this.checkCase.UseVisualStyleBackColor = true;
 			// 
 			// buttonFind
@@ -88,7 +88,7 @@
 			this.buttonFind.Name = "buttonFind";
 			this.buttonFind.Size = new System.Drawing.Size(86, 23);
 			this.buttonFind.TabIndex = 5;
-			this.buttonFind.Text = "Найти далее";
+			this.buttonFind.Text = "&Найти далее";
 			this.buttonFind.UseVisualStyleBackColor = true;
 			this.buttonFind.Click += new System.EventHandler(this.buttonFind_Click);
 			// 
@@ -98,7 +98,7 @@
 			this.buttonReplace.Name = "buttonReplace";
 			this.buttonReplace.Size = new System.Drawing.Size(86, 23);
 			this.buttonReplace.TabIndex = 6;
-			this.buttonReplace.Text = "Заменить";
+			this.buttonReplace.Text = "&Заменить";
 			this.buttonReplace.UseVisualStyleBackColor = true;
 			this.buttonReplace.Click += new System.EventHandler(this.buttonReplace_Click);
 			// 
@@ -108,7 +108,7 @@
 			this.buttonReplaceAll.Name = "buttonReplaceAll";
 			this.buttonReplaceAll.Size = new System.Drawing.Size(86, 23);
 			this.buttonReplaceAll.TabIndex = 7;
-			this.buttonReplaceAll.Text = "Заменить все";
+			this.buttonReplaceAll.Text = "Заменить &все";
 			this.buttonReplaceAll.UseVisualStyleBackColor = true;
 			this.buttonReplaceAll.Click += new System.EventHandler(this.buttonReplaceAll_Click);
 			// 

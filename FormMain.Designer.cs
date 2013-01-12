@@ -50,10 +50,9 @@
 			this.menuEditSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuEditFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuEditFindNext = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuEditSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuEditReplace = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuEditGo = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuEditSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+			this.menuEditSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuEditSelectAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuEditDateTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.форматToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,7 +90,7 @@
 			this.menuMain.Location = new System.Drawing.Point(0, 0);
 			this.menuMain.Name = "menuMain";
 			this.menuMain.Size = new System.Drawing.Size(412, 24);
-			this.menuMain.TabIndex = 0;
+			this.menuMain.TabIndex = 1;
 			this.menuMain.Text = "menuStrip1";
 			// 
 			// menuFile
@@ -108,14 +107,14 @@
             this.menuFileExit});
 			this.menuFile.Name = "menuFile";
 			this.menuFile.Size = new System.Drawing.Size(48, 20);
-			this.menuFile.Text = "Файл";
+			this.menuFile.Text = "&Файл";
 			// 
 			// menuFileNew
 			// 
 			this.menuFileNew.Name = "menuFileNew";
 			this.menuFileNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
 			this.menuFileNew.Size = new System.Drawing.Size(204, 22);
-			this.menuFileNew.Text = "Создать";
+			this.menuFileNew.Text = "Созд&ать";
 			this.menuFileNew.Click += new System.EventHandler(this.menuFileNew_Click);
 			// 
 			// menuFileOpen
@@ -123,7 +122,7 @@
 			this.menuFileOpen.Name = "menuFileOpen";
 			this.menuFileOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
 			this.menuFileOpen.Size = new System.Drawing.Size(204, 22);
-			this.menuFileOpen.Text = "Открыть...";
+			this.menuFileOpen.Text = "&Открыть...";
 			this.menuFileOpen.Click += new System.EventHandler(this.menuFileOpen_Click);
 			// 
 			// menuFileSave
@@ -131,14 +130,14 @@
 			this.menuFileSave.Name = "menuFileSave";
 			this.menuFileSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 			this.menuFileSave.Size = new System.Drawing.Size(204, 22);
-			this.menuFileSave.Text = "Сохранить";
+			this.menuFileSave.Text = "&Сохранить";
 			this.menuFileSave.Click += new System.EventHandler(this.menuFileSave_Click);
 			// 
 			// menuFileSaveAs
 			// 
 			this.menuFileSaveAs.Name = "menuFileSaveAs";
 			this.menuFileSaveAs.Size = new System.Drawing.Size(204, 22);
-			this.menuFileSaveAs.Text = "Сохранить как...";
+			this.menuFileSaveAs.Text = "Сохранить &как...";
 			this.menuFileSaveAs.Click += new System.EventHandler(this.menuFileSaveAs_Click);
 			// 
 			// menuFileSeparator1
@@ -150,7 +149,7 @@
 			// 
 			this.menuFilePageSetup.Name = "menuFilePageSetup";
 			this.menuFilePageSetup.Size = new System.Drawing.Size(204, 22);
-			this.menuFilePageSetup.Text = "Параметры страницы...";
+			this.menuFilePageSetup.Text = "Пара&метры страницы...";
 			this.menuFilePageSetup.Click += new System.EventHandler(this.menuFilePageSetup_Click);
 			// 
 			// menuFilePrint
@@ -158,7 +157,7 @@
 			this.menuFilePrint.Name = "menuFilePrint";
 			this.menuFilePrint.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
 			this.menuFilePrint.Size = new System.Drawing.Size(204, 22);
-			this.menuFilePrint.Text = "Печать...";
+			this.menuFilePrint.Text = "&Печать...";
 			this.menuFilePrint.Click += new System.EventHandler(this.menuFilePrint_Click);
 			// 
 			// menuFileSeparator2
@@ -170,7 +169,7 @@
 			// 
 			this.menuFileExit.Name = "menuFileExit";
 			this.menuFileExit.Size = new System.Drawing.Size(204, 22);
-			this.menuFileExit.Text = "Выход";
+			this.menuFileExit.Text = "В&ыход";
 			this.menuFileExit.Click += new System.EventHandler(this.menuFileExit_Click);
 			// 
 			// menuEdit
@@ -185,15 +184,14 @@
             this.menuEditSeparator2,
             this.menuEditFind,
             this.menuEditFindNext,
-            this.menuEditSeparator3,
             this.menuEditReplace,
             this.menuEditGo,
-            this.menuEditSeparator4,
+            this.menuEditSeparator3,
             this.menuEditSelectAll,
             this.menuEditDateTime});
 			this.menuEdit.Name = "menuEdit";
 			this.menuEdit.Size = new System.Drawing.Size(59, 20);
-			this.menuEdit.Text = "Правка";
+			this.menuEdit.Text = "&Правка";
 			this.menuEdit.DropDownClosed += new System.EventHandler(this.menuEdit_DropDownClosed);
 			this.menuEdit.DropDownOpening += new System.EventHandler(this.menuEdit_DropDownOpening);
 			// 
@@ -202,7 +200,7 @@
 			this.menuEditUndo.Name = "menuEditUndo";
 			this.menuEditUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
 			this.menuEditUndo.Size = new System.Drawing.Size(190, 22);
-			this.menuEditUndo.Text = "Отменить";
+			this.menuEditUndo.Text = "&Отменить";
 			this.menuEditUndo.Click += new System.EventHandler(this.menuEditUndo_Click);
 			// 
 			// menuEditSeparator1
@@ -215,7 +213,7 @@
 			this.menuEditCut.Name = "menuEditCut";
 			this.menuEditCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
 			this.menuEditCut.Size = new System.Drawing.Size(190, 22);
-			this.menuEditCut.Text = "Вырезать";
+			this.menuEditCut.Text = "&Вырезать";
 			this.menuEditCut.Click += new System.EventHandler(this.menuEditCut_Click);
 			// 
 			// menuEditCopy
@@ -223,7 +221,7 @@
 			this.menuEditCopy.Name = "menuEditCopy";
 			this.menuEditCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
 			this.menuEditCopy.Size = new System.Drawing.Size(190, 22);
-			this.menuEditCopy.Text = "Копировать";
+			this.menuEditCopy.Text = "&Копировать";
 			this.menuEditCopy.Click += new System.EventHandler(this.menuEditCopy_Click);
 			// 
 			// menuEditPaste
@@ -231,14 +229,14 @@
 			this.menuEditPaste.Name = "menuEditPaste";
 			this.menuEditPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
 			this.menuEditPaste.Size = new System.Drawing.Size(190, 22);
-			this.menuEditPaste.Text = "Вставить";
+			this.menuEditPaste.Text = "Вст&авить";
 			this.menuEditPaste.Click += new System.EventHandler(this.menuEditPaste_Click);
 			// 
 			// menuEditDelete
 			// 
 			this.menuEditDelete.Name = "menuEditDelete";
 			this.menuEditDelete.Size = new System.Drawing.Size(190, 22);
-			this.menuEditDelete.Text = "Удалить";
+			this.menuEditDelete.Text = "&Удалить";
 			this.menuEditDelete.Click += new System.EventHandler(this.menuEditDelete_Click);
 			// 
 			// menuEditSeparator2
@@ -251,7 +249,7 @@
 			this.menuEditFind.Name = "menuEditFind";
 			this.menuEditFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
 			this.menuEditFind.Size = new System.Drawing.Size(190, 22);
-			this.menuEditFind.Text = "Найти...";
+			this.menuEditFind.Text = "&Найти...";
 			this.menuEditFind.Click += new System.EventHandler(this.menuEditFind_Click);
 			// 
 			// menuEditFindNext
@@ -259,20 +257,15 @@
 			this.menuEditFindNext.Name = "menuEditFindNext";
 			this.menuEditFindNext.ShortcutKeys = System.Windows.Forms.Keys.F3;
 			this.menuEditFindNext.Size = new System.Drawing.Size(190, 22);
-			this.menuEditFindNext.Text = "Найти далее";
+			this.menuEditFindNext.Text = "Найти &далее";
 			this.menuEditFindNext.Click += new System.EventHandler(this.menuEditFindNext_Click);
-			// 
-			// menuEditSeparator3
-			// 
-			this.menuEditSeparator3.Name = "menuEditSeparator3";
-			this.menuEditSeparator3.Size = new System.Drawing.Size(187, 6);
 			// 
 			// menuEditReplace
 			// 
 			this.menuEditReplace.Name = "menuEditReplace";
 			this.menuEditReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
 			this.menuEditReplace.Size = new System.Drawing.Size(190, 22);
-			this.menuEditReplace.Text = "Заменить...";
+			this.menuEditReplace.Text = "&Заменить...";
 			this.menuEditReplace.Click += new System.EventHandler(this.menuEditReplace_Click);
 			// 
 			// menuEditGo
@@ -280,20 +273,20 @@
 			this.menuEditGo.Name = "menuEditGo";
 			this.menuEditGo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
 			this.menuEditGo.Size = new System.Drawing.Size(190, 22);
-			this.menuEditGo.Text = "Перейти...";
+			this.menuEditGo.Text = "Перей&ти...";
 			this.menuEditGo.Click += new System.EventHandler(this.menuEditGo_Click);
 			// 
-			// menuEditSeparator4
+			// menuEditSeparator3
 			// 
-			this.menuEditSeparator4.Name = "menuEditSeparator4";
-			this.menuEditSeparator4.Size = new System.Drawing.Size(187, 6);
+			this.menuEditSeparator3.Name = "menuEditSeparator3";
+			this.menuEditSeparator3.Size = new System.Drawing.Size(187, 6);
 			// 
 			// menuEditSelectAll
 			// 
 			this.menuEditSelectAll.Name = "menuEditSelectAll";
 			this.menuEditSelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
 			this.menuEditSelectAll.Size = new System.Drawing.Size(190, 22);
-			this.menuEditSelectAll.Text = "Выделить все";
+			this.menuEditSelectAll.Text = "Выделить в&се";
 			this.menuEditSelectAll.Click += new System.EventHandler(this.menuEditSelectAll_Click);
 			// 
 			// menuEditDateTime
@@ -301,7 +294,7 @@
 			this.menuEditDateTime.Name = "menuEditDateTime";
 			this.menuEditDateTime.ShortcutKeys = System.Windows.Forms.Keys.F5;
 			this.menuEditDateTime.Size = new System.Drawing.Size(190, 22);
-			this.menuEditDateTime.Text = "Время и дата";
+			this.menuEditDateTime.Text = "Врем&я и дата";
 			this.menuEditDateTime.Click += new System.EventHandler(this.menuEditDateTime_Click);
 			// 
 			// форматToolStripMenuItem
@@ -311,20 +304,20 @@
             this.menuFormatFont});
 			this.форматToolStripMenuItem.Name = "форматToolStripMenuItem";
 			this.форматToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
-			this.форматToolStripMenuItem.Text = "Формат";
+			this.форматToolStripMenuItem.Text = "Фор&мат";
 			// 
 			// menuFormatWordWrap
 			// 
 			this.menuFormatWordWrap.Name = "menuFormatWordWrap";
 			this.menuFormatWordWrap.Size = new System.Drawing.Size(183, 22);
-			this.menuFormatWordWrap.Text = "Перенос по словам";
+			this.menuFormatWordWrap.Text = "&Перенос по словам";
 			this.menuFormatWordWrap.Click += new System.EventHandler(this.menuFormatWordWrap_Click);
 			// 
 			// menuFormatFont
 			// 
 			this.menuFormatFont.Name = "menuFormatFont";
 			this.menuFormatFont.Size = new System.Drawing.Size(183, 22);
-			this.menuFormatFont.Text = "Шрифт...";
+			this.menuFormatFont.Text = "&Шрифт...";
 			this.menuFormatFont.Click += new System.EventHandler(this.menuFormatFont_Click);
 			// 
 			// menuView
@@ -333,14 +326,14 @@
             this.menuViewStatusBar});
 			this.menuView.Name = "menuView";
 			this.menuView.Size = new System.Drawing.Size(39, 20);
-			this.menuView.Text = "Вид";
+			this.menuView.Text = "&Вид";
 			this.menuView.DropDownOpening += new System.EventHandler(this.menuView_DropDownOpening);
 			// 
 			// menuViewStatusBar
 			// 
 			this.menuViewStatusBar.Name = "menuViewStatusBar";
 			this.menuViewStatusBar.Size = new System.Drawing.Size(173, 22);
-			this.menuViewStatusBar.Text = "Строка состояния";
+			this.menuViewStatusBar.Text = "&Строка состояния";
 			this.menuViewStatusBar.Click += new System.EventHandler(this.menuViewStatusBar_Click);
 			// 
 			// menuHelp
@@ -351,7 +344,7 @@
             this.menuHelpAbout});
 			this.menuHelp.Name = "menuHelp";
 			this.menuHelp.Size = new System.Drawing.Size(65, 20);
-			this.menuHelp.Text = "Справка";
+			this.menuHelp.Text = "&Справка";
 			// 
 			// menuHelpHelp
 			// 
@@ -359,7 +352,7 @@
 			this.menuHelpHelp.ShortcutKeys = System.Windows.Forms.Keys.F1;
 			this.menuHelpHelp.ShowShortcutKeys = false;
 			this.menuHelpHelp.Size = new System.Drawing.Size(181, 22);
-			this.menuHelpHelp.Text = "Посмотреть справку";
+			this.menuHelpHelp.Text = "Пос&мотреть справку";
 			this.menuHelpHelp.Click += new System.EventHandler(this.menuHelpHelp_Click);
 			// 
 			// menuHelpSeparator1
@@ -371,7 +364,7 @@
 			// 
 			this.menuHelpAbout.Name = "menuHelpAbout";
 			this.menuHelpAbout.Size = new System.Drawing.Size(181, 22);
-			this.menuHelpAbout.Text = "О программе";
+			this.menuHelpAbout.Text = "&О программе";
 			this.menuHelpAbout.Click += new System.EventHandler(this.menuHelpAbout_Click);
 			// 
 			// statusMain
@@ -382,7 +375,7 @@
 			this.statusMain.Location = new System.Drawing.Point(0, 239);
 			this.statusMain.Name = "statusMain";
 			this.statusMain.Size = new System.Drawing.Size(412, 22);
-			this.statusMain.TabIndex = 1;
+			this.statusMain.TabIndex = 2;
 			this.statusMain.Text = "statusMain";
 			// 
 			// toolStripStatusLabelLeft
@@ -408,7 +401,7 @@
 			this.textMain.Name = "textMain";
 			this.textMain.ScrollBars = System.Windows.Forms.ScrollBars.Both;
 			this.textMain.Size = new System.Drawing.Size(412, 215);
-			this.textMain.TabIndex = 2;
+			this.textMain.TabIndex = 0;
 			// 
 			// dialogOpen
 			// 
@@ -487,10 +480,9 @@
 		private System.Windows.Forms.ToolStripSeparator menuEditSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem menuEditFind;
 		private System.Windows.Forms.ToolStripMenuItem menuEditFindNext;
-		private System.Windows.Forms.ToolStripSeparator menuEditSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem menuEditReplace;
 		private System.Windows.Forms.ToolStripMenuItem menuEditGo;
-		private System.Windows.Forms.ToolStripSeparator menuEditSeparator4;
+		private System.Windows.Forms.ToolStripSeparator menuEditSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem menuEditSelectAll;
 		private System.Windows.Forms.ToolStripMenuItem menuEditDateTime;
 		private System.Windows.Forms.ToolStripMenuItem форматToolStripMenuItem;

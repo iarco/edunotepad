@@ -38,15 +38,15 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(9, 12);
+			this.label1.Location = new System.Drawing.Point(8, 11);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(79, 13);
+			this.label1.Size = new System.Drawing.Size(82, 13);
 			this.label1.TabIndex = 0;
-			this.label1.Text = "&Номер строки";
+			this.label1.Text = "&Номер строки:";
 			// 
 			// numericGoTo
 			// 
-			this.numericGoTo.Location = new System.Drawing.Point(12, 28);
+			this.numericGoTo.Location = new System.Drawing.Point(11, 29);
 			this.numericGoTo.Name = "numericGoTo";
 			this.numericGoTo.Size = new System.Drawing.Size(227, 20);
 			this.numericGoTo.TabIndex = 1;
@@ -54,7 +54,7 @@
 			// buttonGoTo
 			// 
 			this.buttonGoTo.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonGoTo.Location = new System.Drawing.Point(81, 54);
+			this.buttonGoTo.Location = new System.Drawing.Point(83, 63);
 			this.buttonGoTo.Name = "buttonGoTo";
 			this.buttonGoTo.Size = new System.Drawing.Size(75, 23);
 			this.buttonGoTo.TabIndex = 2;
@@ -63,7 +63,8 @@
 			// 
 			// buttonCancel
 			// 
-			this.buttonCancel.Location = new System.Drawing.Point(162, 54);
+			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.buttonCancel.Location = new System.Drawing.Point(164, 63);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonCancel.TabIndex = 3;

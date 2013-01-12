@@ -34,8 +34,8 @@
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.checkCase = new System.Windows.Forms.CheckBox();
 			this.groupDirection = new System.Windows.Forms.GroupBox();
-			this.radioDirectonBackward = new System.Windows.Forms.RadioButton();
 			this.radioDirectonForward = new System.Windows.Forms.RadioButton();
+			this.radioDirectonBackward = new System.Windows.Forms.RadioButton();
 			this.groupDirection.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -46,7 +46,7 @@
 			this.labelFind.Name = "labelFind";
 			this.labelFind.Size = new System.Drawing.Size(29, 13);
 			this.labelFind.TabIndex = 0;
-			this.labelFind.Text = "Что:";
+			this.labelFind.Text = "Чт&о:";
 			// 
 			// textFind
 			// 
@@ -61,17 +61,18 @@
 			this.buttonFind.Location = new System.Drawing.Point(281, 8);
 			this.buttonFind.Name = "buttonFind";
 			this.buttonFind.Size = new System.Drawing.Size(80, 23);
-			this.buttonFind.TabIndex = 2;
-			this.buttonFind.Text = "Найти далее";
+			this.buttonFind.TabIndex = 4;
+			this.buttonFind.Text = "&Найти далее";
 			this.buttonFind.UseVisualStyleBackColor = true;
 			this.buttonFind.Click += new System.EventHandler(this.buttonFind_Click);
 			// 
 			// buttonCancel
 			// 
+			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.Location = new System.Drawing.Point(281, 37);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 23);
-			this.buttonCancel.TabIndex = 3;
+			this.buttonCancel.TabIndex = 5;
 			this.buttonCancel.Text = "Отмена";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -82,8 +83,8 @@
 			this.checkCase.Location = new System.Drawing.Point(6, 68);
 			this.checkCase.Name = "checkCase";
 			this.checkCase.Size = new System.Drawing.Size(120, 17);
-			this.checkCase.TabIndex = 4;
-			this.checkCase.Text = "С учетом регистра";
+			this.checkCase.TabIndex = 2;
+			this.checkCase.Text = "С у&четом регистра";
 			this.checkCase.UseVisualStyleBackColor = true;
 			// 
 			// groupDirection
@@ -93,20 +94,9 @@
 			this.groupDirection.Location = new System.Drawing.Point(153, 39);
 			this.groupDirection.Name = "groupDirection";
 			this.groupDirection.Size = new System.Drawing.Size(120, 47);
-			this.groupDirection.TabIndex = 5;
+			this.groupDirection.TabIndex = 3;
 			this.groupDirection.TabStop = false;
 			this.groupDirection.Text = "Направление";
-			// 
-			// radioDirectonBackward
-			// 
-			this.radioDirectonBackward.AutoSize = true;
-			this.radioDirectonBackward.Location = new System.Drawing.Point(6, 19);
-			this.radioDirectonBackward.Name = "radioDirectonBackward";
-			this.radioDirectonBackward.Size = new System.Drawing.Size(55, 17);
-			this.radioDirectonBackward.TabIndex = 0;
-			this.radioDirectonBackward.TabStop = true;
-			this.radioDirectonBackward.Text = "Вверх";
-			this.radioDirectonBackward.UseVisualStyleBackColor = true;
 			// 
 			// radioDirectonForward
 			// 
@@ -116,8 +106,19 @@
 			this.radioDirectonForward.Size = new System.Drawing.Size(50, 17);
 			this.radioDirectonForward.TabIndex = 1;
 			this.radioDirectonForward.TabStop = true;
-			this.radioDirectonForward.Text = "Вниз";
+			this.radioDirectonForward.Text = "Вн&из";
 			this.radioDirectonForward.UseVisualStyleBackColor = true;
+			// 
+			// radioDirectonBackward
+			// 
+			this.radioDirectonBackward.AutoSize = true;
+			this.radioDirectonBackward.Location = new System.Drawing.Point(6, 19);
+			this.radioDirectonBackward.Name = "radioDirectonBackward";
+			this.radioDirectonBackward.Size = new System.Drawing.Size(55, 17);
+			this.radioDirectonBackward.TabIndex = 0;
+			this.radioDirectonBackward.TabStop = true;
+			this.radioDirectonBackward.Text = "В&верх";
+			this.radioDirectonBackward.UseVisualStyleBackColor = true;
 			// 
 			// FormFind
 			// 

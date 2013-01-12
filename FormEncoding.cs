@@ -34,6 +34,7 @@ namespace EduNotepad
 							comboEncoding.SelectedIndex = 1;
 							break;
 						}
+					// Здесь два варианта для совместимости с ранними версиями .NET Framework (спасибо Диме Крохину)
 					case "unicodeFFFE":
 					case "utf-16BE":
 						{
